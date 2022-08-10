@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class Category(models.Model):
     title = models.CharField(max_length=40, verbose_name='Наименование')
     description = models.TextField(blank=True, verbose_name='Описание')
