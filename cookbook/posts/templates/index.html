@@ -1,20 +1,51 @@
-{% extends "base.html" %}
-{% block title %} Последние обновления {% endblock %}
+{% extends 'base.html' %}
+{% load bootstrap_pagination %}
+
+{% block title %}
+    Главная страница
+{% endblock %}
 
 {% block content %}
+{% load user_filters %}
 
-    <div class="container">
+    <div class="row">
+        <div class="col-md-8">
 
+            {% if messages %}
 
-            <h2> Последние обновления на сайте</h2>
-
-            <!-- Вывод ленты записей -->
-
-                {% for post in posts %}
-                    {{ post.text}}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </div>
                 {% endfor %}
 
+            {% endif %}
 
+            {% for post in posts %}
+                <div class="row" style="margin-bottom: 30px;">
+                    <div class="col-md-12">
+                        <a href="{% url 'detail_post' slug=post.slug category=post.category|slug_transl %}">
+                            <h3>{{ post.title }}</h3>
+                        </a>
+                            <small>{{ message }}</small>
+
+                            <ol>
+                                {% for user in users %}
+                                    <li>{{ user.username }}</li>
+                                {% endfor %}
+                            </ol>
+                        <article>
+                            {{ post.text|linebreaksbr }}
+                        </article>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-12">
+            {% bootstrap_paginate page_obj range=7 %}
+        </div>
+    </div>
 {% endblock %}

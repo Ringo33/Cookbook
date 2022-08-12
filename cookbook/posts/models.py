@@ -18,6 +18,8 @@ class Category(models.Model):
 
 
 class Post(models.Model):
+    title = models.CharField(max_length=60, verbose_name='Наименование')
+    slug = models.SlugField(max_length=128, verbose_name='URL')
     text = models.TextField(verbose_name='Текст')
     pub_date = models.DateTimeField(
         auto_now_add=True,
@@ -32,9 +34,10 @@ class Post(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,
-        blank=True,
+        blank=False,
         null=True,
-        related_name="posts"
+        related_name="posts",
+        verbose_name='Категория'
     )
     image = models.ImageField(
         upload_to='photos/%Y/%m/%d/',
