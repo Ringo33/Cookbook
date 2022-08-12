@@ -1,9 +1,5 @@
 from django import forms
-from django.forms.widgets import (
-    Textarea,
-    TextInput,
-)
-
+from django.forms.widgets import Textarea
 from .models import Post, Comment
 
 

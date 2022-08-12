@@ -5,10 +5,15 @@
 {% endblock %}
 
 {% block content %}
+{% load user_filters %}
+
 
     <div class="row" style="margin-bottom: 40px;">
         <div class="col-md-12">
             <h1>{{ post.title }}</h1>
+
+
+
 
             <div style="font-weight: bold;">
                 Автор: {{ post.author.username }}, опубликовано: {{ post.pub_date|naturalday }}
@@ -19,36 +24,31 @@
                 </p>
             </article>
 
-<!--            {% comment %}-->
-<!--            <div class="row">-->
-<!--                <div class="col-md-10">-->
-<!--                    <a href="{% url 'edit_post' slug=post.slug %}">-->
-<!--                        <button class="btn btn-warning">Редактировать</button>-->
-<!--                    </a>-->
-<!--                </div>-->
 
-<!--                <div class="col-md-2 text-right">-->
-<!--                    <a href="{% url 'delete_post' slug=post.slug %}">-->
-<!--                        <button type="submit" class="btn btn-danger">Удалить</button>-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            {% endcomment %}-->
-
+            <div class="row">
+                <div class="col-md-10">
+                    <a href="{% url 'edit_post' slug=post.slug category=post.category|slug_transl %}">
+                        <button class="btn btn-warning">Редактировать</button>
+                    </a>
+                </div>
+                <div class="col-md-2 text-right">
+                    <a href="{% url 'delete_post' slug=post.slug category=post.category|slug_transl %}">
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
-<!--    {% comment %}-->
-<!--    <div class="row">-->
-<!--        <div class="col-md-4">-->
-<!--            <form action="{% url 'add_comment' slug=post.slug %}" method="post">-->
-<!--                {% csrf_token %}-->
-<!--                {{ comments_form.as_p }}-->
-<!--                <button type="submit" class="btn btn-success">Добавить</button>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    {% endcomment %}-->
+    <div class="row">
+        <div class="col-md-4">
+            <form action="{% url 'add_comment' slug=post.slug category=post.category|slug_transl %}" method="post">
+                {% csrf_token %}
+                {{ comments_form.as_p }}
+                <button type="submit" class="btn btn-success">Добавить</button>
+            </form>
+        </div>
+    </div>
 
     {% if post.comments %}
         <div class="row">

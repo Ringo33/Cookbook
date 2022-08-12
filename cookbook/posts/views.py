@@ -1,30 +1,3 @@
-# from django.contrib import messages
-# from django.shortcuts import (
-#     render,
-#     get_object_or_404,
-#     redirect,
-# )
-# from django.utils.decorators import method_decorator
-# from django.views.generic import (
-#     ListView,
-#     DetailView,
-#     CreateView,
-#     UpdateView,
-#     DeleteView,
-# )
-# from .forms import PostModelForm, CommentModelForm
-# from .models import Category, Post, Comment
-# from django.contrib.auth.decorators import login_required
-# from django.urls import reverse_lazy, reverse
-# from django.views.decorators.cache import cache_page
-# from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.utils.text import slugify
-# from transliterate import translit
-from django.shortcuts import (
-    render,
-    get_object_or_404,
-    redirect,
-)
 from django.utils.text import slugify
 from django.urls import reverse, reverse_lazy
 from transliterate import translit
@@ -51,11 +24,6 @@ class PostListView(ListView):
     paginate_by = 5
     context_object_name = 'posts'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        data = super().get_context_data(object_list=object_list, **kwargs)
-        print(data)
-        return data
-
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -77,10 +45,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         category = slugify(translit(str(self.object.category), language_code='ru', reversed=True))
+        # return reverse('detail_post', kwargs={'slug': self.object.slug, 'category': self.object.category.slug})
         return reverse('detail_post', kwargs={'slug': self.object.slug, 'category': category})
 
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
     template_name = 'post_detail.html'
     context_object_name = 'post'
@@ -88,31 +57,40 @@ class PostDetailView(DetailView):
         'comments_form': CommentModelForm()
     }
 
-# @login_required()
-# def new_post(request):
-#     if request.method == 'POST':
-#         form = PostForm(request.POST or None, files=request.FILES or None)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             post.author = request.user
-#             post.save()
-#             return redirect('index')
-#         else:
-#             return render(request, 'new.html', {'form': form})
-#     else:
-#         form = PostForm()
-#     return render(request, 'new.html',
-#                   {'form': form,
-#                    'button_name': 'Добавить',
-#                    'title': 'Добавить запись',
-#                    'url_name': 'new_post'}
-#                   )
 
-# @login_required()
-# class NewPost(CreateView):
-#     form_class = BookForm
-#     success_url = reverse_lazy("index")
-#     template_name = "test.html"
-#
-#     def form_valid(self, form):
-#         return super().form_valid(form)
+class PostUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    form_class = PostModelForm
+    template_name = 'post_form.html'
+
+    @property
+    def success_url(self):
+        category = slugify(translit(str(self.object.category), language_code='ru', reversed=True))
+        return reverse('detail_post', kwargs={'slug': self.object.slug, 'category': category})
+
+
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = 'post_delete.html'
+    model = Post
+    success_url = reverse_lazy('index')
+
+    def get_context_data(self, **kwargs):
+        messages.add_message(
+            self.request, messages.INFO, f'Пост {self.object.title} удален', extra_tags='info'
+        )
+        return super().get_context_data(**kwargs)
+
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentModelForm
+
+    def form_valid(self, form):
+        comments = form.save(commit=False)
+        comments.author = self.request.user
+        comments.post = Post.objects.get(slug=self.kwargs.get('slug'))
+        comments.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('detail_post', kwargs={'slug': self.kwargs.get('slug'), 'category': self.kwargs.get('category')})

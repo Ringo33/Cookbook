@@ -5,7 +5,7 @@ User = get_user_model()
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=40, verbose_name='Наименование')
+    title = models.CharField(max_length=40, unique=True, verbose_name='Наименование')
     description = models.TextField(blank=True, verbose_name='Описание')
     slug = models.SlugField(unique=True)
 
@@ -18,7 +18,7 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=60, verbose_name='Наименование')
+    title = models.CharField(max_length=60, unique=True, verbose_name='Наименование')
     slug = models.SlugField(max_length=128, verbose_name='URL')
     text = models.TextField(verbose_name='Текст')
     pub_date = models.DateTimeField(

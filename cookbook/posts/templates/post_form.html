@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Добавить пост{% endblock %}
+{% block title %}
+{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col-md-8">
-        <h1>Добавить пост</h1>
+            <h1>Редактировать пост</h1>
             <form method="post" enctype='multipart/form-data'>
                 {% csrf_token %}
                 {% for field in form %}
@@ -23,9 +24,11 @@
                 {% endfor %}
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">Добавить</button>
+                    <button type="submit" class="btn btn-primary">Обновить</button>
                 </div>
             </form>
+
         </div>
     </div>
+
 {% endblock %}
