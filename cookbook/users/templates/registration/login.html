@@ -38,12 +38,15 @@
               </div>
           </div>
 
-          <div class="col-md-6 offset-md-4">              
+          <div class="col-md-8 offset-md-4">
               <button type="submit" class="btn btn-primary">
                 Войти
               </button>
               <a href="{% url 'password_reset' %}" class="btn btn-link">
                 Забыли пароль?
+              </a>
+              <a href="{% url 'signup' %}" class="btn btn-link">
+                Регистрация
               </a>
           </div>
         </form>

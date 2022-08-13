@@ -1,0 +1,21 @@
+{% load thumbnail %}
+{% load user_filters %}
+
+<div class="col">
+  <div class="card h-100">
+
+    {% thumbnail post.image "660x339" crop="center" upscale=True as im %}
+      <a href="{% url 'detail_post' slug=post.slug category=post.category|slug_transl %}">
+      <img class="card-img" src="{{ im.url }}" />
+      </a>
+
+
+    {% endthumbnail %}
+
+
+    <div class="card-body">
+      <h5 class="card-title">{{ post.title }}</h5>
+      <p class="card-text">{{ post.text | linebreaksbr | truncatewords:50 }}</p>
+    </div>
+  </div>
+</div>

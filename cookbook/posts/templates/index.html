@@ -1,24 +1,19 @@
 {% extends 'base.html' %}
 {% load bootstrap_pagination %}
 
-{% block title %}
-    Главная страница
-{% endblock %}
+{% block title %} Главная страница {% endblock %}
 
 {% block content %}
 {% load user_filters %}
 
     <div class="row">
         <div class="col-md-8">
-
             {% if messages %}
-
                 {% for message in messages %}
                     <div class="alert alert-{{ message.tags }}" role="alert">
                         {{ message }}
                     </div>
                 {% endfor %}
-
             {% endif %}
 
             {% for post in posts %}

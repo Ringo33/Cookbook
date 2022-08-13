@@ -1,0 +1,10 @@
+<div class="row col-md-2">
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+            Все блюда
+        </a>
+        {% for item in category %}
+            <a href="#" class="list-group-item list-group-item-action">{{ item.title }}</a>
+        {% endfor %}
+    </div>
+</div>

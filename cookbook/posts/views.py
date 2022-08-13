@@ -17,12 +17,20 @@ from .models import Category, Post, Comment
 from .forms import PostModelForm, CommentModelForm
 
 
-@method_decorator(login_required, name='dispatch')
+# @method_decorator(login_required, name='dispatch')
 class PostListView(ListView):
     model = Post
-    template_name = 'index.html'
-    paginate_by = 5
+    template_name = 'index2.html'
+    paginate_by = 10
     context_object_name = 'posts'
+    extra_context = {
+        'category': Category.objects.all()
+    }
+
+    def get_queryset(self):
+        name = self.request.GET.get('s', '')
+        object_list = Post.objects.filter(text__icontains=name)
+        return object_list
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
