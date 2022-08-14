@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 from django.urls import reverse, reverse_lazy
 from transliterate import translit
@@ -20,17 +21,45 @@ from .forms import PostModelForm, CommentModelForm
 # @method_decorator(login_required, name='dispatch')
 class PostListView(ListView):
     model = Post
-    template_name = 'index2.html'
-    paginate_by = 10
+    template_name = 'index.html'
+    paginate_by = 8
+    context_object_name = 'posts'
+    extra_context = {
+        'category': Category.objects.all(),
+        'status': 'active'
+    }
+
+    def get_queryset(self):
+        request = self.request.GET.get('s', '')
+        name = slugify(translit(request, language_code='ru', reversed=True))
+        object_list = Post.objects.filter(slug__icontains=name)
+        return object_list
+
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'index.html'
+    paginate_by = 8
     context_object_name = 'posts'
     extra_context = {
         'category': Category.objects.all()
     }
 
     def get_queryset(self):
-        name = self.request.GET.get('s', '')
-        object_list = Post.objects.filter(text__icontains=name)
+        category = get_object_or_404(Category, slug=self.kwargs.get('category'))
+        request = self.request.GET.get('s', '')
+        name = slugify(translit(request, language_code='ru', reversed=True))
+        if name:
+            object_list = Post.objects.filter(slug__icontains=name)
+        else:
+            object_list = category.posts.all()
         return object_list
+
+    # добавление в контекст категории, чтобы транслировать в categories_list.html
+    def get_context_data(self, **kwargs):
+        context = super(CategoryListView, self).get_context_data(**kwargs)
+        context['status'] = self.kwargs.get('category')
+        return context
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -70,6 +99,19 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostModelForm
     template_name = 'post_form.html'
+
+    def form_valid(self, form):
+        posts = form.save(commit=False)
+        posts.author = self.request.user
+        posts.slug = slugify(translit(posts.title, language_code='ru', reversed=True))
+        posts.save()
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            f'Пост "{posts.title}" добавлен',
+            extra_tags='success'
+        )
+        return super().form_valid(form)
 
     @property
     def success_url(self):

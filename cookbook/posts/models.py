@@ -18,7 +18,7 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=60, unique=True, verbose_name='Наименование')
+    title = models.CharField(max_length=100, unique=True, verbose_name='Наименование')
     slug = models.SlugField(max_length=128, verbose_name='URL')
     text = models.TextField(verbose_name='Текст')
     pub_date = models.DateTimeField(

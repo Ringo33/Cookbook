@@ -1,15 +1,58 @@
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-    <a class="navbar-brand" href="/"><span style="color:red">Кулинарная</span> книга</a>
-    <nav class="my-2 my-md-0 mr-md-3">
-        {% if user.is_authenticated %}
-        Пользователь: {{ user.username }}.
-        <a class="p-2 text-dark" href="{% url 'add_post' %}">Новая запись</a>
-        <a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
-        <a class="p-2 text-dark" href="{% url 'password_reset' %}">Восстановить пароль</a>
-        <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
-        {% else %}
-        <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
-        <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
-        {% endif %}
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <title>Bootstrap Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+
+  <body class="p-3 m-0 border-0 bd-example">
+    <nav class="navbar navbar-expand-md bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="/">Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" wfd-invisible="true">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="{% url 'add_post' %}">Новая запись</a>
+            </li>
+            {% if user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Пользователь {{ user.username }}
+                </a>
+                <ul class="dropdown-menu" wfd-invisible="true">
+                  <li><a class="dropdown-item" href="{% url 'password_change' %}">Изменить пароль</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                </ul>
+              </li>
+            {% else %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Войти
+                </a>
+                <ul class="dropdown-menu" wfd-invisible="true">
+                  <li><a class="dropdown-item" href="{% url 'login' %}">Войти</a></li>
+                  <li><a class="dropdown-item" href="{% url 'signup' %}">Регистрация</a></li>
+                  <li><a class="dropdown-item" href="{% url 'password_reset' %}">Восстановить пароль</a></li>
+                </ul>
+            {% endif %}
+              </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input name="s" class="form-control me-2" type="search" placeholder="Введите запрос" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Поиск</button>
+          </form>
+        </div>
+      </div>
     </nav>
-</nav>
+  </body>
+
+</html>

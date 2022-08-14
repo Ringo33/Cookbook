@@ -1,72 +1,72 @@
 {% extends 'base.html' %}
 {% load humanize %}
-{% block title %}
-    {{ post.title }}
-{% endblock %}
-
-{% block content %}
 {% load user_filters %}
 {% load thumbnail %}
 
+{% block title %}
+{{ post.title }}
+{% endblock %}
 
-    <div class="row" style="margin-bottom: 40px;">
-        <div class="col-md-12">
-            <h1>{{ post.title }}</h1>
+{% block content %}
 
-            {% thumbnail post.image "660x339" crop="center" upscale=True as im %}
-                <img class="card-img" src="{{ im.url }}" />
-            {% endthumbnail %}
+<div class="row" style="margin-bottom: 40px;">
+    <div class="col-md-12">
+        <h1>{{ post.title }}</h1>
 
-
-            <div style="font-weight: bold;">
-                Автор: {{ post.author.username }}, опубликовано: {{ post.pub_date|naturalday }}
-            </div>
-            <article style="padding-top:10px;">
-                <p>
-                    {{ post.text|linebreaksbr }}
-                </p>
-            </article>
+        {% thumbnail post.image "660x339" crop="center" upscale=True as im %}
+        <img class="card-img" src="{{ im.url }}"/>
+        {% endthumbnail %}
 
 
-            <div class="row">
-                <div class="col-md-10">
-                    <a href="{% url 'edit_post' slug=post.slug category=post.category|slug_transl %}">
-                        <button class="btn btn-warning">Редактировать</button>
-                    </a>
-                </div>
-                <div class="col-md-2 text-right">
-                    <a href="{% url 'delete_post' slug=post.slug category=post.category|slug_transl %}">
-                        <button type="submit" class="btn btn-danger">Удалить</button>
-                    </a>
-                </div>
-            </div>
+        <div style="font-weight: bold;">
+            Автор: {{ post.author.username }}, опубликовано: {{ post.pub_date|naturalday }}
         </div>
-    </div>
+        <article style="padding-top:10px;">
+            <p>
+                {{ post.text|linebreaksbr }}
+            </p>
+        </article>
 
-    <div class="row">
-        <div class="col-md-4">
-            <form action="{% url 'add_comment' slug=post.slug category=post.category|slug_transl %}" method="post">
-                {% csrf_token %}
-                {{ comments_form.as_p }}
-                <button type="submit" class="btn btn-success">Добавить</button>
-            </form>
-        </div>
-    </div>
 
-    {% if post.comments %}
         <div class="row">
-            <div class="col-md-6">
-                <h3>Комментарии ({{ post.comments.count }})</h3>
-                {% for comment in post.comments.all %}
-                    <div>
-                        <span>{{ comment.author.username }} <i>пишет</i>:</span>
-                        <blockquote>{{ comment.text }}</blockquote>
-                    </div>
-                {% endfor %}
+            <div class="col-md-10">
+                <a href="{% url 'edit_post' slug=post.slug category=post.category|slug_transl %}">
+                    <button class="btn btn-warning">Редактировать</button>
+                </a>
+            </div>
+            <div class="col-md-2 text-right">
+                <a href="{% url 'delete_post' slug=post.slug category=post.category|slug_transl %}">
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                </a>
             </div>
         </div>
+    </div>
+</div>
 
-    {% endif %}
+<div class="row">
+    <div class="col-md-4">
+        <form action="{% url 'add_comment' slug=post.slug category=post.category|slug_transl %}" method="post">
+            {% csrf_token %}
+            {{ comments_form.as_p }}
+            <button type="submit" class="btn btn-success">Добавить</button>
+        </form>
+    </div>
+</div>
+
+{% if post.comments %}
+<div class="row">
+    <div class="col-md-6">
+        <h3>Комментарии ({{ post.comments.count }})</h3>
+        {% for comment in post.comments.all %}
+        <div>
+            <span>{{ comment.author.username }} <i>пишет</i>:</span>
+            <blockquote>{{ comment.text }}</blockquote>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endif %}
 
 
 {% endblock %}

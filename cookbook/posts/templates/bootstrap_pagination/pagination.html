@@ -1,4 +1,7 @@
 {% load bootstrap_pagination %}
+
+{% if page.has_other_pages %}
+
 <nav aria-label="Навигация по страницам">
 <ul class="pagination{% if size == "small" %} pagination-sm{% endif %}{% if size == "large" %} pagination-lg{% endif %}{% block extra_classes %}{% endblock %}">
 {% if show_first_last %}
@@ -54,3 +57,5 @@
 {% endif %}
 </ul>
 </nav>
+
+{% endif %}

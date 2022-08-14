@@ -1,10 +1,16 @@
+{% load user_filters %}
+
 <div class="row col-md-2">
     <div class="list-group">
-        <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+        <a href="/" class="list-group-item list-group-item-action {{ status }}" aria-current="true">
             Все блюда
         </a>
         {% for item in category %}
-            <a href="#" class="list-group-item list-group-item-action">{{ item.title }}</a>
+            {% if status == item.title|slug_transl %}
+            <a href="{% url 'category_post' category=item.title|slug_transl%}" class="list-group-item list-group-item-action active">{{ item.title }}</a>
+            {% else %}
+            <a href="{% url 'category_post' category=item.title|slug_transl %}" class="list-group-item list-group-item-action">{{ item.title }}</a>
+            {% endif %}
         {% endfor %}
     </div>
 </div>
