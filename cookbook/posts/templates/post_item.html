@@ -26,7 +26,7 @@
 
                 <h5 class="card-title">{{ post.title }}</h5>
 
-                <p class="card-text">{{ post.text | linebreaksbr | truncatewords:30 }}</p>
+                <p class="card-text">{{ post.text | linebreaksbr | truncatewords:20 }}</p>
 
                 <small class="text-muted">Обновлено {{ post.upd_date | date }}</small>
                 {% if post.comments.count %}
