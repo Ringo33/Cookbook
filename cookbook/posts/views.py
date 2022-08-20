@@ -13,7 +13,7 @@ from django.views.generic import (
 )
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import cache_page
+# from django.views.decorators.cache import cache_page
 from .models import Category, Post, Comment
 from .forms import PostModelForm, CommentModelForm
 

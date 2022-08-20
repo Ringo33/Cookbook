@@ -1,0 +1,4 @@
+Django==3.2
+transliterate
+django-bootstrap-pagination
+sorl-thumbnail
