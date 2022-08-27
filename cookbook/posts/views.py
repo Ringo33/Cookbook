@@ -1,6 +1,7 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils.text import slugify
 from django.urls import reverse, reverse_lazy
+from django.views.decorators.cache import cache_page
 from transliterate import translit
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,12 +14,11 @@ from django.views.generic import (
 )
 from django.utils.decorators import method_decorator
 # from django.contrib.auth.decorators import login_required
-# from django.views.decorators.cache import cache_page
 from .models import Category, Post, Comment
 from .forms import PostModelForm, CommentModelForm
 
 
-# @method_decorator(login_required, name='dispatch')
+# @method_decorator(cache_page(15), name='dispatch')
 class PostListView(ListView):
     model = Post
     template_name = 'index.html'
@@ -101,14 +101,11 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'post_form.html'
 
     def form_valid(self, form):
-        posts = form.save(commit=False)
-        posts.author = self.request.user
-        posts.slug = slugify(translit(posts.title, language_code='ru', reversed=True))
-        posts.save()
+        posts = form.save()
         messages.add_message(
             self.request,
             messages.SUCCESS,
-            f'Пост "{posts.title}" добавлен',
+            f'Пост "{posts.title}" обновлен',
             extra_tags='success'
         )
         return super().form_valid(form)
@@ -144,3 +141,16 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('detail_post', kwargs={'slug': self.kwargs.get('slug'), 'category': self.kwargs.get('category')})
+
+
+def page_not_found(request, exception):
+    return render(
+        request,
+        "misc/404.html",
+        {"path": request.path},
+        status=404
+    )
+
+
+def server_error(request):
+    return render(request, "misc/500.html", status=500)
