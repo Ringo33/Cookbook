@@ -25,4 +25,5 @@ class CookBookTest(TestCase):
     def test_index_code_200(self):
         response = self.client.get(reverse('index'))
         print(response)
+
         self.assertEqual(response.status_code, 200)
