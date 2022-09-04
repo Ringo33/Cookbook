@@ -23,7 +23,6 @@ class CookBookTest(TestCase):
         )
 
 
-
     def test_index_code_200(self):
         response = self.client.get(reverse('index'))
         print(response)
