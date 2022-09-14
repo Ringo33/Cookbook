@@ -13,12 +13,11 @@ from django.views.generic import (
     DeleteView,
 )
 from django.utils.decorators import method_decorator
-# from django.contrib.auth.decorators import login_required
 from .models import Category, Post, Comment
 from .forms import PostModelForm, CommentModelForm
 
 
-# @method_decorator(cache_page(15), name='dispatch')
+@method_decorator(cache_page(5), name='dispatch')
 class PostListView(ListView):
     model = Post
     template_name = 'index.html'
