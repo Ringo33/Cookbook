@@ -53,12 +53,16 @@ INSTALLED_APPS = [
     'bootstrap_pagination',
     'django.contrib.humanize',
     "debug_toolbar",
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -161,3 +165,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+# объявляем новый способ аутентификации TokenAuthentication и, одновременно,
+# запрещаем доступ всем неаутентифицированным пользователям
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    # 'DEFAULT_RENDERER_CLASSES': [
+    #     'rest_framework.renderers.JSONRenderer',
+    # ]
+}
+
+# разрешение обрабатывать запросы, приходящие с любого хоста
+CORS_ORIGIN_ALLOW_ALL = True
+
+# URL, к которым можно обращаться с других доменов
+CORS_URLS_REGEX = r'^/api/.*$'
