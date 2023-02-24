@@ -107,6 +107,16 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ringo33$mysql_db2',
+#         'USER': 'ringo33',
+#         'PASSWORD': 'Bingo555',
+#         'HOST': 'ringo33.mysql.pythonanywhere-services.com',
+#         'PORT': '3306',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
