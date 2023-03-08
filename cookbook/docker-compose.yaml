@@ -1,0 +1,20 @@
+version: '3.8'
+
+volumes:
+  staticfiles:
+
+services:
+  app:
+    build: .
+    volumes:
+      - staticfiles:/code/static
+
+  nginx:
+    image: nginx:1.19.6
+    volumes:
+      - staticfiles:/static
+      - ./host.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8888:80
+    depends_on:
+      - app
