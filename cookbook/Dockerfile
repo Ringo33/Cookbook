@@ -1,5 +1,11 @@
 FROM python:3.10-slim-buster
 
+RUN apt-get update \
+    && apt-get -y install build-essential \
+    libpq-dev libssl-dev libffi-dev \
+    libxml2-dev libxslt1-dev libssl1.1 \
+    postgresql-client
+
 RUN mkdir /code
 COPY . /code
 WORKDIR /code
